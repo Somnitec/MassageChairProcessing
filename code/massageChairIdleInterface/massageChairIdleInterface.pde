@@ -13,27 +13,43 @@ Minim minim;
 AudioPlayer audioPlayer;
 
 public void setup() {
-  
+
   size(480, 320, JAVA2D);
   myPort = new Serial(this, "COM5", 115200);
   createGUI();
   customGUI();
   // Place your setup code here
   minim = new Minim(this);
-  audioPlayer = minim.loadFile("kneading.wav");
+  audioPlayer = minim.loadFile("speech1.mp3");
+  //audioPlayer.loop();
+  //audioPlayer.pause();
 }
 
 public void draw() {
   background(230);
   /*
   if(audioPlayer.isPlaying()){
-    kneading.setSelected(true);
-    
-  } else kneading.setSelected(false);
-  */
-  if(programRunning.isSelected()){
-    kneading.setSelected(true);
+   kneading.setSelected(true);
    
+   } else kneading.setSelected(false);
+   */
+  if (programRunning.isSelected()) {
+    if ( !audioPlayer.isPlaying())  audioPlayer.loop();
+
+    if (!pounding.isSelected()) {
+      pounding.setSelected(true);
+      pounding_clicked(pounding, GEvent.CLICKED);
+    }
+
+
+    background((int)map(audioPlayer.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 255));
+    poundingSpeed.setValue(map(audioPlayer.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 1));
+    poundingSpeed_change(poundingSpeed, GEvent.CLICKED);
+  } else {
+    if ( audioPlayer.isPlaying() ) {
+      audioPlayer.pause();
+    }
+  
   }
 }
 
@@ -42,12 +58,7 @@ public void draw() {
 public void customGUI() {
 }
 
-void knead() {
-  
 
-  audioPlayer.play();
-  
-}
 
 void sendCommand(String input, int value) {
 

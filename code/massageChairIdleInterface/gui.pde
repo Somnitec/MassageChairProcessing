@@ -111,6 +111,10 @@ public void chairFlat_clicked(GCheckbox source, GEvent event) { //_CODE_:chairFl
   else sendCommand("chair_position_target",10000);
 } //_CODE_:chairFlat:629966:
 
+public void voiceTriggerLevel_change1(GSlider source, GEvent event) { //_CODE_:voiceTriggerLevel:799723:
+  println("slider2 - GSlider >> GEvent." + event + " @ " + millis());
+} //_CODE_:voiceTriggerLevel:799723:
+
 
 
 // Create all the GUI controls. 
@@ -219,6 +223,13 @@ public void createGUI(){
   label2.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
   label2.setText("rollerPos");
   label2.setOpaque(false);
+  voiceTriggerLevel = new GSlider(this, 303, 130, 160, 53, 10.0);
+  voiceTriggerLevel.setShowValue(true);
+  voiceTriggerLevel.setRotation(PI/2, GControlMode.CORNER);
+  voiceTriggerLevel.setLimits(0.01, 0.5, 0.0);
+  voiceTriggerLevel.setNumberFormat(G4P.DECIMAL, 2);
+  voiceTriggerLevel.setOpaque(false);
+  voiceTriggerLevel.addEventHandler(this, "voiceTriggerLevel_change1");
 }
 
 // Variable declarations 
@@ -243,3 +254,4 @@ GCheckbox redGreen;
 GLabel label1; 
 GCheckbox chairFlat; 
 GLabel label2; 
+GSlider voiceTriggerLevel; 
