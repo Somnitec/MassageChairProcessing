@@ -4,6 +4,10 @@ import g4p_controls.*;
 // the GViewPeasyCam control or the PeasyCam library.
 import peasy.*;
 import ddf.minim.*;
+import processing.serial.*;
+
+
+Serial myPort; 
 
 Minim minim;
 AudioPlayer audioPlayer;
@@ -11,6 +15,7 @@ AudioPlayer audioPlayer;
 public void setup() {
   
   size(480, 320, JAVA2D);
+  myPort = new Serial(this, "COM5", 115200);
   createGUI();
   customGUI();
   // Place your setup code here
@@ -42,4 +47,9 @@ void knead() {
 
   audioPlayer.play();
   
+}
+
+void sendCommand(String input, int value) {
+
+  myPort.write("{" + input + ":["+str(value)+ "]}");
 }
