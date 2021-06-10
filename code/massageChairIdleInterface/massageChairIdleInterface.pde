@@ -34,41 +34,102 @@ public void setup() {
   // Place your setup code here
   minim = new Minim(this);
   speech = loadStrings("speech.txt");
-  googleTTS(speech[(int)random(speech.length)]);
+  audioPlayer = minim.loadFile("speech.mp3", 2048);
+  //googleTTS(speech[(int)random(speech.length)]);
 
   frameRate(10);
 }
 
+boolean caseRunning = false;
+int currentCase =0;
+int caseStartTime;
+int cycles=0;
+int cycleTime;
+
 public void draw() {
   background(230);
-  /*
-  if(audioPlayer.isPlaying()){
-   kneading.setSelected(true);
-   
-   } else kneading.setSelected(false);
-   */
+
   if (programRunning.isSelected()) {
+    if (!caseRunning) {
+      int cases = 3;
+      currentCase =  (int)random(cases);
+      println("new case = "+currentCase);
+      caseRunning=true;
+      caseStartTime = millis();
+    } else {
+      switch (currentCase) {
+      case 0://chilling
+        if (cycles<=0)cycles =4;
+        cycleTime = 2000;
+        if (millis()-caseStartTime>cycleTime) {
+          airpump.setSelected(true);
+          airpump_clicked(pounding, GEvent.CLICKED);
+          caseStartTime+=cycleTime;
+          cycles--;
+          println(cycles%1);
+
+          outsideBellows.setSelected(boolean(cycles%2));
+          outsideBellows_clicked(outsideBellows, GEvent.CLICKED);
+        }
+        if (cycles<0) {
+          caseRunning=false;
+          println("that was chilling");
+          airpump.setSelected(false);
+          airpump_clicked(pounding, GEvent.CLICKED);
+        }
+        break;
+      case 1://massaging
+        if (cycles<=0)cycles =10;
+        cycleTime = 1000;
+        if (millis()-caseStartTime>cycleTime) {
+          pounding.setSelected(boolean(int(random(2))));
+          pounding_clicked(pounding, GEvent.CLICKED);
+          kneading.setSelected(boolean(int(random(2))));
+          kneading_clicked(pounding, GEvent.CLICKED);
+
+          caseStartTime+=cycleTime;
+          cycles--;
+          //println(cycles);
+        }
+        if (cycles<0) {
+          caseRunning=false;
+          println("that was massaging");
+        }
+        break;
+      case 2://talking
+        if (!audioPlayer.isPlaying())googleTTS(speech[(int)random(speech.length)]);
+        if (!audioPlayer.isPlaying()) {
+          caseRunning=false;
+          println("that was talking");
+        }
+        break;
+      }
+    }
+
+    /*
     if ( !audioPlayer.isPlaying())  audioPlayer.loop();
+     
+     if (!pounding.isSelected()) {
+     pounding.setSelected(true);
+     pounding_clicked(pounding, GEvent.CLICKED);
+     }
+     if (!kneading.isSelected()) {
+     kneading.setSelected(true);
+     kneading_clicked(pounding, GEvent.CLICKED);
+     }
+     } else {
+     if ( audioPlayer.isPlaying() ) {
+     audioPlayer.pause();
+     }
+     */
+  }
 
-    if (!pounding.isSelected()) {
-      pounding.setSelected(true);
-      pounding_clicked(pounding, GEvent.CLICKED);
-    }
-    if (!kneading.isSelected()) {
-      kneading.setSelected(true);
-      kneading_clicked(pounding, GEvent.CLICKED);
-    }
-
-
+  if (audioPlayer.isPlaying()) {
     background((int)map(audioPlayer.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 255));
     poundingSpeed.setValue(map(audioPlayer.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 1));
     poundingSpeed_change(poundingSpeed, GEvent.CLICKED);
     kneadingSpeed.setValue(map(audioPlayer.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 1));
     kneadingSpeed_change(kneadingSpeed, GEvent.CLICKED);
-  } else {
-    if ( audioPlayer.isPlaying() ) {
-      audioPlayer.pause();
-    }
   }
 }
 
