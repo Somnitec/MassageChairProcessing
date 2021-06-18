@@ -24,17 +24,25 @@ Serial controllerArduino;
 Minim minim;
 AudioPlayer audioPlayer;
 
+AudioPlayer audioPounding;
+AudioPlayer audioKneading;
+
 public void setup() {
 
   size(480, 320, JAVA2D);
-  chairArduino = new Serial(this, "COM5", 115200);
-  controllerArduino  = new Serial(this, "COM7", 115200);
   createGUI();
   customGUI();
+
   // Place your setup code here
+
+  chairArduino = new Serial(this, "COM5", 115200);
+  controllerArduino  = new Serial(this, "COM7", 115200);
   minim = new Minim(this);
   speech = loadStrings("speech.txt");
   audioPlayer = minim.loadFile("speech.mp3", 2048);
+  audioPounding = minim.loadFile("pounding.mp3");
+  audioKneading = minim.loadFile("kneading.mp3");
+
   //googleTTS(speech[(int)random(speech.length)]);
 
   frameRate(10);

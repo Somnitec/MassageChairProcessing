@@ -16,14 +16,24 @@
 
 public void pounding_clicked(GCheckbox source, GEvent event) { //_CODE_:pounding:553098:
   println("pounding - GCheckbox >> GEvent." + event + " @ " + millis());
-  if (pounding.isSelected())sendCommand("roller_pounding_on", 1);
-  else sendCommand("roller_pounding_on", 0);
+  if (pounding.isSelected()) {
+    sendCommand("roller_pounding_on", 1);
+    audioPounding.loop();
+  } else {
+    sendCommand("roller_pounding_on", 0);
+    audioPounding.pause();
+  }
 } //_CODE_:pounding:553098:
 
 public void kneading_clicked(GCheckbox source, GEvent event) { //_CODE_:kneading:406306:
   println("kneading - GCheckbox >> GEvent." + event + " @ " + millis());
-  if (kneading.isSelected())sendCommand("roller_kneading_on", 1);
-  else sendCommand("roller_kneading_on", 0);
+  if (kneading.isSelected()) {
+    sendCommand("roller_kneading_on", 1);
+    audioKneading.loop();
+  } else {
+    sendCommand("roller_kneading_on", 0);
+    audioKneading.pause();
+  }
 } //_CODE_:kneading:406306:
 
 public void shoulders_clicked(GCheckbox source, GEvent event) { //_CODE_:shoulders:258416:
@@ -107,13 +117,18 @@ public void redGreen_clicked(GCheckbox source, GEvent event) { //_CODE_:redGreen
 
 public void chairFlat_clicked(GCheckbox source, GEvent event) { //_CODE_:chairFlat:629966:
   println("chairFlat - GCheckbox >> GEvent." + event + " @ " + millis());
-    if(chairFlat.isSelected())sendCommand("chair_position_target",0000);
-  else sendCommand("chair_position_target",10000);
+  if (chairFlat.isSelected())sendCommand("chair_position_target", 0000);
+  else sendCommand("chair_position_target", 10000);
 } //_CODE_:chairFlat:629966:
 
 public void voiceTriggerLevel_change1(GSlider source, GEvent event) { //_CODE_:voiceTriggerLevel:799723:
   println("slider2 - GSlider >> GEvent." + event + " @ " + millis());
 } //_CODE_:voiceTriggerLevel:799723:
+
+public void testSpeech_click(GButton source, GEvent event) { //_CODE_:testSpeech:962442:
+  println("testSpeech - GButton >> GEvent." + event + " @ " + millis());
+  googleTTS(speech[(int)random(speech.length)]);
+} //_CODE_:testSpeech:962442:
 
 
 
@@ -230,6 +245,9 @@ public void createGUI(){
   voiceTriggerLevel.setNumberFormat(G4P.DECIMAL, 2);
   voiceTriggerLevel.setOpaque(false);
   voiceTriggerLevel.addEventHandler(this, "voiceTriggerLevel_change1");
+  testSpeech = new GButton(this, 337, 273, 80, 30);
+  testSpeech.setText("test speech");
+  testSpeech.addEventHandler(this, "testSpeech_click");
 }
 
 // Variable declarations 
@@ -255,3 +273,4 @@ GLabel label1;
 GCheckbox chairFlat; 
 GLabel label2; 
 GSlider voiceTriggerLevel; 
+GButton testSpeech; 
