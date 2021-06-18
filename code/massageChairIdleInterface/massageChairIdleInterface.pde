@@ -40,8 +40,8 @@ public void setup() {
   minim = new Minim(this);
   speech = loadStrings("speech.txt");
   audioPlayer = minim.loadFile("speech.mp3", 2048);
-  audioPounding = minim.loadFile("pounding.mp3");
-  audioKneading = minim.loadFile("kneading.mp3");
+  audioPounding = minim.loadFile("pounding.wav");
+  audioKneading = minim.loadFile("kneading.wav");
 
   //googleTTS(speech[(int)random(speech.length)]);
 
@@ -59,6 +59,7 @@ public void draw() {
 
   if (programRunning.isSelected()) {
     if (!caseRunning) {
+      resetAll();
       int cases = 3;
       currentCase =  (int)random(cases);
       println("new case = "+currentCase);
@@ -67,7 +68,7 @@ public void draw() {
     } else {
       switch (currentCase) {
       case 0://chilling
-        if (cycles<=0)cycles =4;
+        if (cycles<0)cycles =4;
         cycleTime = 2000;
         if (millis()-caseStartTime>cycleTime) {
           airpump.setSelected(true);
@@ -87,7 +88,7 @@ public void draw() {
         }
         break;
       case 1://massaging
-        if (cycles<=0)cycles =10;
+        if (cycles<0)cycles =10;
         cycleTime = 1000;
         if (millis()-caseStartTime>cycleTime) {
           pounding.setSelected(boolean(int(random(2))));
@@ -105,10 +106,17 @@ public void draw() {
         }
         break;
       case 2://talking
-        if (!audioPlayer.isPlaying())googleTTS(speech[(int)random(speech.length)]);
         if (!audioPlayer.isPlaying()) {
-          caseRunning=false;
-          println("that was talking");
+          if (cycles<1) {
+            googleTTS(speech[(int)random(speech.length)]);
+            cycles = 1;
+          } else {
+            caseRunning=false;
+            cycles = -1;
+            println("that was talking");
+          }
+        }
+        if (!audioPlayer.isPlaying()) {
         }
         break;
       }
@@ -161,7 +169,7 @@ void sendScreen(String text) {//does not work
 
 void googleTTS(String txt) {
   String u = "https://translate.google.com/translate_tts?ie=UTF-8&tl=";
-  u = u + "en-GB" + "&client=tw-ob&q=" + txt;
+  u = u + "en-US" + "&client=tw-ob&q=" + txt;
   u = u.replace(" ", "+");
   try {
     URL url = new URL(u);
@@ -191,4 +199,34 @@ void googleTTS(String txt) {
 
   audioPlayer.play();
   //s = "";
+}
+
+void resetAll() {
+  poundingSpeed.setValue(1);
+  poundingSpeed_change(poundingSpeed, GEvent.CLICKED);
+  kneadingSpeed.setValue(1);
+  kneadingSpeed_change(kneadingSpeed, GEvent.CLICKED);
+  feetRollerSpeed.setValue(1);
+  feetRollerSpeed_change(kneadingSpeed, GEvent.CLICKED);
+  pounding.setSelected(false);
+  pounding_clicked(pounding, GEvent.CLICKED);
+  kneading.setSelected(false);
+  kneading_clicked(pounding, GEvent.CLICKED);
+
+  feetRoller.setSelected(false);
+  feetRoller_clicked(feetRoller, GEvent.CLICKED);
+  airpump.setSelected(false);
+  airpump_clicked(airpump, GEvent.CLICKED);
+  shoulders.setSelected(false);
+ shoulders_clicked(shoulders, GEvent.CLICKED);
+  arms.setSelected(false);
+  arms_clicked(arms, GEvent.CLICKED);
+  legs.setSelected(false);
+  legs_clicked(legs, GEvent.CLICKED);
+  outsideBellows.setSelected(false);
+  outsideBellows_clicked(outsideBellows, GEvent.CLICKED);
+  redGreen.setSelected(false);
+  redGreen_clicked(redGreen, GEvent.CLICKED);
+  chairFlat.setSelected(false);
+  chairFlat_clicked(chairFlat, GEvent.CLICKED);
 }
