@@ -1,6 +1,5 @@
 //todo
-//make massage choose a few random parameters and timings
-//balance audio levels between speech and massage
+//vary breathing time
 
 
 import java.net.*;
@@ -57,12 +56,19 @@ public void setup() {
   audioPounding = minim.loadFile("data/sounds/pounding.wav");
   audioKneading = minim.loadFile("data/sounds/kneading.wav");
   audioFeet = minim.loadFile("data/sounds/feetroller.wav");
+  audioBreath= minim.loadFile("speech.mp3");
+  audioChairFlat= minim.loadFile("speech.mp3");
 
-  audioVoice.setGain(-10);
+  audioVoice.setGain(10);
+
+  audioPounding.setGain(-10);
+  audioKneading.setGain(-20);
+  audioFeet.setGain(-5);
+  audioChairFlat.setGain(-20);
+  audioBreath.setGain(-10);
 
 
-
-  frameRate(10);
+  frameRate(60);
   voiceTriggerLevel.setValue(.15);
 }
 
@@ -78,6 +84,7 @@ public void draw() {
 
   if (audioVoice.isPlaying()) {
     //background((int)map(audioVoice.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 255));
+
     poundingSpeed.setValue(map(audioVoice.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 1));
     poundingSpeed_change(poundingSpeed, GEvent.CLICKED);
     kneadingSpeed.setValue(map(audioVoice.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 1));
@@ -180,14 +187,19 @@ void resetAll() {
     chairFlat.setSelected(false);
     chairFlat_clicked(chairFlat, GEvent.CLICKED);
   }
+
+  audioPounding.unmute();
+  audioKneading.unmute();
 }
 
 void bellowSound(boolean in) {
+  /*
   if (in) {
-    audioRedGreen = minim.loadFile("data/sounds/airbagsin/airbag"+(int)random(3)+".wav");
-    audioRedGreen.play();
-  } else {
-    audioRedGreen = minim.loadFile("data/sounds/airbagsout/airbagout"+(int)random(3)+".wav");
-    audioRedGreen.play();
-  }
+   audioRedGreen = minim.loadFile("data/sounds/airbagsin/airbag"+(int)random(3)+".wav");
+   audioRedGreen.play();
+   } else {
+   audioRedGreen = minim.loadFile("data/sounds/airbagsout/airbagout"+(int)random(3)+".wav");
+   audioRedGreen.play();
+   }
+   */
 }

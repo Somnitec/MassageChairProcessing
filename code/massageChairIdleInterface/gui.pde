@@ -85,8 +85,8 @@ public void outsideBellows_clicked(GCheckbox source, GEvent event) { //_CODE_:ou
 public void rollerPos_change(GSlider source, GEvent event) { //_CODE_:rollerPos:911197:
   println("rollerPos - GSlider >> GEvent." + event + " @ " + millis());
   sendCommand("roller_position_target", (int)map(rollerPos.getValueF(), 0., 1., 10000, 0));
-  audioRollerPos = minim.loadFile("data/sounds/rollerpos/rollerpos"+(int)random(3)+".wav");
-  audioRollerPos.play();
+  //audioRollerPos = minim.loadFile("data/sounds/rollerpos/rollerpos"+(int)random(3)+".wav");
+  //audioRollerPos.play();
 } //_CODE_:rollerPos:911197:
 
 public void programRunning_clicked(GCheckbox source, GEvent event) { //_CODE_:programRunning:293782:
@@ -278,6 +278,7 @@ public void createGUI(){
   serialOn.setText("serialOn");
   serialOn.setOpaque(false);
   serialOn.addEventHandler(this, "serialOn_clicked");
+  serialOn.setSelected(true);
   robotVoice = new GCheckbox(this, 248, 28, 120, 20);
   robotVoice.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   robotVoice.setText("robotVoice");

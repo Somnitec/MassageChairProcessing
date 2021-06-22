@@ -79,6 +79,8 @@ void runProgram() {
     println("new case = "+currentCase);
     caseRunning=true;
     caseStartTime = millis();
+    rollerPos.setValue(random(1.));
+    rollerPos_change(rollerPos, GEvent.CLICKED);
   } else {
     switch (currentCase) {
     case 0://chilling
@@ -146,7 +148,7 @@ void runProgram() {
           rollerPos.setValue(random(1.));
           rollerPos_change(rollerPos, GEvent.CLICKED);
         }
- 
+
 
         caseStartTime+=cycleTime;
         cycles--;
@@ -160,6 +162,14 @@ void runProgram() {
     case 2://talking
       if (!audioVoice.isPlaying()) {
         if (cycles<1) {
+          audioPounding.mute();
+          audioKneading.mute();
+
+
+          pounding.setSelected(true);
+          pounding_clicked(pounding, GEvent.CLICKED);
+          kneading.setSelected(true);
+          kneading_clicked(pounding, GEvent.CLICKED);
           speech_click(speech, GEvent.CLICKED);
           cycles = 1;
         } else {
