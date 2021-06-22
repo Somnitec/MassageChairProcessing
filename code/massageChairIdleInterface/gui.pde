@@ -105,8 +105,16 @@ public void airpump_clicked(GCheckbox source, GEvent event) { //_CODE_:airpump:7
 public void redGreen_clicked(GCheckbox source, GEvent event) { //_CODE_:redGreen:320531:
   println("redGreen - GCheckbox >> GEvent." + event + " @ " + millis());
 
-  if (redGreen.isSelected())sendCommand("redgreen_statuslight", 1);
-  else sendCommand("redgreen_statuslight", 0);
+  if (redGreen.isSelected()){
+    audioRedGreen = minim.loadFile("data/sounds/red/red"+(int)random(4)+".wav");
+    audioRedGreen.play();
+    sendCommand("redgreen_statuslight", 1);
+  }
+  else {
+    sendCommand("redgreen_statuslight", 0);
+    audioRedGreen = minim.loadFile("data/sounds/green/green"+(int)random(4)+".wav");
+    audioRedGreen.play();
+  }
 } //_CODE_:redGreen:320531:
 
 public void chairFlat_clicked(GCheckbox source, GEvent event) { //_CODE_:chairFlat:629966:
