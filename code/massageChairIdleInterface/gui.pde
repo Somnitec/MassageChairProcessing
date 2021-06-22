@@ -65,18 +65,6 @@ public void rollerPos_change(GSlider source, GEvent event) { //_CODE_:rollerPos:
   sendCommand("roller_position_target", (int)map(rollerPos.getValueF(), 0., 1., 10000, 0));
 } //_CODE_:rollerPos:911197:
 
-public void poundingChance_change(GSlider source, GEvent event) { //_CODE_:poundingChance:584226:
-  println("poundingChance - GSlider >> GEvent." + event + " @ " + millis());
-} //_CODE_:poundingChance:584226:
-
-public void poundingTime_change(GSlider source, GEvent event) { //_CODE_:poundingTime:975761:
-  println("poundingTime - GSlider >> GEvent." + event + " @ " + millis());
-} //_CODE_:poundingTime:975761:
-
-public void poundingOnTimeBalance_change(GSlider source, GEvent event) { //_CODE_:poundingOnTimeBalance:272659:
-  println("poundingOnTimeBalance - GSlider >> GEvent." + event + " @ " + millis());
-} //_CODE_:poundingOnTimeBalance:272659:
-
 public void programRunning_clicked(GCheckbox source, GEvent event) { //_CODE_:programRunning:293782:
   println("programRunning - GCheckbox >> GEvent." + event + " @ " + millis());
 } //_CODE_:programRunning:293782:
@@ -93,8 +81,14 @@ public void poundingSpeed_change(GSlider source, GEvent event) { //_CODE_:poundi
 
 public void feetRoller_clicked(GCheckbox source, GEvent event) { //_CODE_:feetRoller:520485:
   println("feetRoller - GCheckbox >> GEvent." + event + " @ " + millis());
-  if (feetRoller.isSelected())sendCommand("feet_roller_on", 1);
-  else sendCommand("feet_roller_on", 0);
+  if (feetRoller.isSelected()){
+    sendCommand("feet_roller_on", 1);
+    audioFeet.loop();
+  }
+  else {
+    sendCommand("feet_roller_on", 0);
+    audioFeet.pause();
+  }
 } //_CODE_:feetRoller:520485:
 
 public void feetRollerSpeed_change(GSlider source, GEvent event) { //_CODE_:feetRollerSpeed:441059:
@@ -125,10 +119,19 @@ public void voiceTriggerLevel_change1(GSlider source, GEvent event) { //_CODE_:v
   println("slider2 - GSlider >> GEvent." + event + " @ " + millis());
 } //_CODE_:voiceTriggerLevel:799723:
 
-public void testSpeech_click(GButton source, GEvent event) { //_CODE_:testSpeech:962442:
+public void speech_click(GButton source, GEvent event) { //_CODE_:speech:962442:
   println("testSpeech - GButton >> GEvent." + event + " @ " + millis());
-  googleTTS(speech[(int)random(speech.length)]);
-} //_CODE_:testSpeech:962442:
+  if(robotVoice.isSelected())  googleTTS(speechString[(int)random(speechString.length)]);
+  else speak();
+} //_CODE_:speech:962442:
+
+public void serialOn_clicked(GCheckbox source, GEvent event) { //_CODE_:serialOn:806468:
+  println("serialOn - GCheckbox >> GEvent." + event + " @ " + millis());
+} //_CODE_:serialOn:806468:
+
+public void robotVoice_clicked(GCheckbox source, GEvent event) { //_CODE_:robotVoice:950079:
+  println("robotVoice - GCheckbox >> GEvent." + event + " @ " + millis());
+} //_CODE_:robotVoice:950079:
 
 
 
@@ -175,21 +178,6 @@ public void createGUI(){
   rollerPos.setNumberFormat(G4P.DECIMAL, 2);
   rollerPos.setOpaque(false);
   rollerPos.addEventHandler(this, "rollerPos_change");
-  poundingChance = new GSlider(this, 253, 69, 100, 40, 10.0);
-  poundingChance.setLimits(0.5, 0.0, 1.0);
-  poundingChance.setNumberFormat(G4P.DECIMAL, 2);
-  poundingChance.setOpaque(false);
-  poundingChance.addEventHandler(this, "poundingChance_change");
-  poundingTime = new GSlider(this, 346, 71, 100, 40, 10.0);
-  poundingTime.setLimits(0.5, 0.0, 1.0);
-  poundingTime.setNumberFormat(G4P.DECIMAL, 2);
-  poundingTime.setOpaque(false);
-  poundingTime.addEventHandler(this, "poundingTime_change");
-  poundingOnTimeBalance = new GSlider(this, 389, 100, 100, 40, 10.0);
-  poundingOnTimeBalance.setLimits(0.5, 0.0, 1.0);
-  poundingOnTimeBalance.setNumberFormat(G4P.DECIMAL, 2);
-  poundingOnTimeBalance.setOpaque(false);
-  poundingOnTimeBalance.addEventHandler(this, "poundingOnTimeBalance_change");
   programRunning = new GCheckbox(this, 20, 290, 120, 20);
   programRunning.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   programRunning.setText("programRunning");
@@ -245,9 +233,24 @@ public void createGUI(){
   voiceTriggerLevel.setNumberFormat(G4P.DECIMAL, 2);
   voiceTriggerLevel.setOpaque(false);
   voiceTriggerLevel.addEventHandler(this, "voiceTriggerLevel_change1");
-  testSpeech = new GButton(this, 337, 273, 80, 30);
-  testSpeech.setText("test speech");
-  testSpeech.addEventHandler(this, "testSpeech_click");
+  speech = new GButton(this, 337, 273, 80, 30);
+  speech.setTextAlign(GAlign.CENTER, GAlign.CENTER);
+  speech.setText("speech");
+  speech.addEventHandler(this, "speech_click");
+  label3 = new GLabel(this, 235, 112, 106, 20);
+  label3.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  label3.setText("Voice trigger level");
+  label3.setOpaque(false);
+  serialOn = new GCheckbox(this, 247, 66, 120, 20);
+  serialOn.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
+  serialOn.setText("SerialOn");
+  serialOn.setOpaque(false);
+  serialOn.addEventHandler(this, "serialOn_clicked");
+  robotVoice = new GCheckbox(this, 248, 28, 120, 20);
+  robotVoice.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
+  robotVoice.setText("robotVoice");
+  robotVoice.setOpaque(false);
+  robotVoice.addEventHandler(this, "robotVoice_clicked");
 }
 
 // Variable declarations 
@@ -259,9 +262,6 @@ GCheckbox arms;
 GCheckbox legs; 
 GCheckbox outsideBellows; 
 GSlider rollerPos; 
-GSlider poundingChance; 
-GSlider poundingTime; 
-GSlider poundingOnTimeBalance; 
 GCheckbox programRunning; 
 GSlider kneadingSpeed; 
 GSlider poundingSpeed; 
@@ -273,4 +273,7 @@ GLabel label1;
 GCheckbox chairFlat; 
 GLabel label2; 
 GSlider voiceTriggerLevel; 
-GButton testSpeech; 
+GButton speech; 
+GLabel label3; 
+GCheckbox serialOn; 
+GCheckbox robotVoice; 

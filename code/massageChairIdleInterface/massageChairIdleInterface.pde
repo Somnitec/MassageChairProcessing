@@ -17,26 +17,29 @@ import g4p_controls.*;
 import peasy.*;
 import ddf.minim.*;
 import processing.serial.*;
-import processing.sound.*;
-SoundFile file;
 
 import java.net.*;
 import java.io.*;
 
 
 
-String[] speech;
+String[] speechString;
 
 
 Serial chairArduino;
 Serial controllerArduino; 
 
 Minim minim;
-AudioPlayer audioPlayer;
+AudioPlayer audioVoice;
 
 AudioPlayer audioPounding;
 AudioPlayer audioKneading;
-
+AudioPlayer audioFeet;
+AudioPlayer audioAirbags;
+AudioPlayer audioBreath;
+AudioPlayer audioChairFlat;
+AudioPlayer audioRollerPos;
+AudioPlayer audioRedGreen;
 
 
 
@@ -47,17 +50,17 @@ public void setup() {
   customGUI();
 
   // Place your setup code here
-
-  chairArduino = new Serial(this, "COM5", 115200);
-  controllerArduino  = new Serial(this, "COM7", 115200);
+  if (serialOn.isSelected()) {
+    chairArduino = new Serial(this, "COM5", 115200);
+    controllerArduino  = new Serial(this, "COM7", 115200);
+  }
   minim = new Minim(this);
-  speech = loadStrings("speech.txt");
-  audioPlayer = minim.loadFile("speech.mp3", 2048);
-  audioPounding = minim.loadFile("pounding.wav");
-  audioKneading = minim.loadFile("kneading.wav");
+  speechString = loadStrings("speech.txt");
+  audioVoice = minim.loadFile("speech.mp3", 2048);
+  audioPounding = minim.loadFile("data/sounds/pounding.wav");
+  audioKneading = minim.loadFile("data/sounds/kneading.wav");
+  audioFeet = minim.loadFile("data/sounds/feetroller.wav");
 
-
-  //googleTTS(speech[(int)random(speech.length)]);
 
   frameRate(10);
 }
@@ -161,9 +164,9 @@ public void draw() {
         }
         break;
       case 2://talking
-        if (!audioPlayer.isPlaying()) {
+        if (!audioVoice.isPlaying()) {
           if (cycles<1) {
-            googleTTS(speech[(int)random(speech.length)]);
+            speech_click(speech, GEvent.CLICKED);
             cycles = 1;
           } else {
             caseRunning=false;
@@ -171,7 +174,7 @@ public void draw() {
             println("that was talking");
           }
         }
-        if (!audioPlayer.isPlaying()) {
+        if (!audioVoice.isPlaying()) {
         }
         break;
       }
@@ -195,11 +198,11 @@ public void draw() {
      */
   }
 
-  if (audioPlayer.isPlaying()) {
-    background((int)map(audioPlayer.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 255));
-    poundingSpeed.setValue(map(audioPlayer.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 1));
+  if (audioVoice.isPlaying()) {
+    //background((int)map(audioVoice.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 255));
+    poundingSpeed.setValue(map(audioVoice.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 1));
     poundingSpeed_change(poundingSpeed, GEvent.CLICKED);
-    kneadingSpeed.setValue(map(audioPlayer.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 1));
+    kneadingSpeed.setValue(map(audioVoice.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 1));
     kneadingSpeed_change(kneadingSpeed, GEvent.CLICKED);
   }
 }
@@ -212,8 +215,7 @@ public void customGUI() {
 
 
 void sendCommand(String input, int value) {
-
-  chairArduino.write("{" + input + ":["+str(value)+ "]}");
+  if (serialOn.isSelected())  chairArduino.write("{" + input + ":["+str(value)+ "]}");
 }
 
 void sendScreen(String text) {//does not work
@@ -222,7 +224,11 @@ void sendScreen(String text) {//does not work
   println(input);
 }
 
+void speak(){
+}
+
 void googleTTS(String txt) {
+  println("speaking: "+txt);
   String u = "https://translate.google.com/translate_tts?ie=UTF-8&tl=";
   u = u + "en-US" + "&client=tw-ob&q=" + txt;
   u = u.replace(" ", "+");
@@ -250,9 +256,9 @@ void googleTTS(String txt) {
   catch (MalformedURLException e) {
     e.printStackTrace();
   }
-  audioPlayer = minim.loadFile("speech.mp3", 2048);
+  audioVoice = minim.loadFile("speech.mp3", 2048);
 
-  audioPlayer.play();
+  audioVoice.play();
   //s = "";
 }
 
