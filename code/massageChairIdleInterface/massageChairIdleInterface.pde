@@ -55,7 +55,7 @@ public void setup() {
   audioPlayer = minim.loadFile("speech.mp3", 2048);
   audioPounding = minim.loadFile("pounding.wav");
   audioKneading = minim.loadFile("kneading.wav");
-  
+
 
   //googleTTS(speech[(int)random(speech.length)]);
 
@@ -68,10 +68,51 @@ int caseStartTime;
 int cycles=0;
 int cycleTime;
 
+boolean breathIn = false;
+int breathTimer = 0;
+
 public void draw() {
   background(230);
 
   if (programRunning.isSelected()) {
+    int bpm = 12;
+    float breathInFraction = map(bpm, 5, 40, .2, .5);
+    int breathTime = 60000 / bpm;
+    if (breathIn)breathTime*=breathInFraction;
+    else breathTime*=(1-breathInFraction);
+
+    int timeNow=millis();
+    if (timeNow-breathTimer>breathTime) {
+      breathTimer=timeNow;
+      breathIn=!breathIn;
+      if (breathIn) {
+        println("breath in");
+        airpump.setSelected(true);
+        airpump_clicked(pounding, GEvent.CLICKED);
+        outsideBellows.setSelected(true);
+        outsideBellows_clicked(outsideBellows, GEvent.CLICKED);
+      } else {
+        println("breath out");
+        airpump.setSelected(false);
+        airpump_clicked(pounding, GEvent.CLICKED);
+        outsideBellows.setSelected(false);
+        outsideBellows_clicked(outsideBellows, GEvent.CLICKED);
+      }
+    }
+
+
+    //breathing code
+    //40s until breating continues slow after talking
+
+    //normal breathing 12 to 15breaths per minute
+    //1.5-2s in
+    //1.5-2s out
+    //1-2s pauze
+
+    //5bpm is slow breathing
+    //exersize is 30-40bpm
+
+
     if (!caseRunning) {
       resetAll();
       int cases = 3;
@@ -85,20 +126,20 @@ public void draw() {
         if (cycles<0)cycles =4;
         cycleTime = 2000;
         if (millis()-caseStartTime>cycleTime) {
-          airpump.setSelected(true);
-          airpump_clicked(pounding, GEvent.CLICKED);
+          //airpump.setSelected(true);
+          //airpump_clicked(pounding, GEvent.CLICKED);
           caseStartTime+=cycleTime;
           cycles--;
           println(cycles%1);
 
-          outsideBellows.setSelected(boolean(cycles%2));
-          outsideBellows_clicked(outsideBellows, GEvent.CLICKED);
+          //outsideBellows.setSelected(boolean(cycles%2));
+          //outsideBellows_clicked(outsideBellows, GEvent.CLICKED);
         }
         if (cycles<0) {
           caseRunning=false;
           println("that was chilling");
-          airpump.setSelected(false);
-          airpump_clicked(pounding, GEvent.CLICKED);
+          //airpump.setSelected(false);
+          //airpump_clicked(pounding, GEvent.CLICKED);
         }
         break;
       case 1://massaging
@@ -232,7 +273,7 @@ void resetAll() {
   airpump.setSelected(false);
   airpump_clicked(airpump, GEvent.CLICKED);
   shoulders.setSelected(false);
- shoulders_clicked(shoulders, GEvent.CLICKED);
+  shoulders_clicked(shoulders, GEvent.CLICKED);
   arms.setSelected(false);
   arms_clicked(arms, GEvent.CLICKED);
   legs.setSelected(false);
