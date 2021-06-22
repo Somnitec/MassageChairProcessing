@@ -1,3 +1,13 @@
+//todo
+//make breathing contant (but slowing/speeding?)
+//write texts for speech
+//make massage program make some sense
+//record delicate sounds
+//edit and tweak sounds for on sound shower (left/right separate, no distortion, right volume)
+//confirm sounds not getting boring
+//better speech engine?
+
+
 import java.net.*;
 
 // Need G4P library
@@ -27,6 +37,9 @@ AudioPlayer audioPlayer;
 AudioPlayer audioPounding;
 AudioPlayer audioKneading;
 
+
+
+
 public void setup() {
 
   size(480, 320, JAVA2D);
@@ -42,6 +55,7 @@ public void setup() {
   audioPlayer = minim.loadFile("speech.mp3", 2048);
   audioPounding = minim.loadFile("pounding.wav");
   audioKneading = minim.loadFile("kneading.wav");
+  
 
   //googleTTS(speech[(int)random(speech.length)]);
 
