@@ -5,9 +5,9 @@
  * designer and care should be taken when editing this file.
  * Only add/edit code inside the event handlers i.e. only
  * use lines between the matching comment tags. e.g.
-
+ 
  void myBtnEvents(GButton button) { //_CODE_:button1:12356:
-     // It is safe to enter your event code here  
+ // It is safe to enter your event code here  
  } //_CODE_:button1:12356:
  
  * Do not rename this tab!
@@ -38,31 +38,55 @@ public void kneading_clicked(GCheckbox source, GEvent event) { //_CODE_:kneading
 
 public void shoulders_clicked(GCheckbox source, GEvent event) { //_CODE_:shoulders:258416:
   println("shoulders - GCheckbox >> GEvent." + event + " @ " + millis());
-  if (shoulders.isSelected())sendCommand("airbag_shoulders_on", 1);
-  else sendCommand("airbag_shoulders_on", 0);
+  if (shoulders.isSelected()) {
+    bellowSound(true);
+    sendCommand("airbag_shoulders_on", 1);
+  } else {
+    bellowSound(false);
+    sendCommand("airbag_shoulders_on", 0);
+  }
 } //_CODE_:shoulders:258416:
 
 public void arms_clicked(GCheckbox source, GEvent event) { //_CODE_:arms:305022:
   println("arms - GCheckbox >> GEvent." + event + " @ " + millis());
-  if (arms.isSelected())sendCommand("airbag_arms_on", 1);
-  else sendCommand("airbag_arms_on", 0);
+  if (arms.isSelected()) {
+    bellowSound(true);
+    sendCommand("airbag_arms_on", 1);
+  } else {
+    bellowSound(false);
+    sendCommand("airbag_arms_on", 0);
+  }
 } //_CODE_:arms:305022:
 
 public void legs_clicked(GCheckbox source, GEvent event) { //_CODE_:legs:989793:
   println("legs - GCheckbox >> GEvent." + event + " @ " + millis());
-  if (legs.isSelected())sendCommand("airbag_legs_on", 1);
-  else sendCommand("airbag_legs_on", 0);
+  if (legs.isSelected()) {
+    bellowSound(true);
+    sendCommand("airbag_legs_on", 1);
+  } else {
+    bellowSound(false);
+    sendCommand("airbag_legs_on", 0);
+  }
 } //_CODE_:legs:989793:
 
 public void outsideBellows_clicked(GCheckbox source, GEvent event) { //_CODE_:outsideBellows:931493:
   println("outsideBellows - GCheckbox >> GEvent." + event + " @ " + millis());
-  if (outsideBellows.isSelected())sendCommand("airbag_outside_on", 1);
-  else sendCommand("airbag_outside_on", 0);
+  if (outsideBellows.isSelected()) {
+    sendCommand("airbag_outside_on", 1);
+    audioBreath = minim.loadFile("data/sounds/breathin/in"+(int)random(4)+".wav");
+    audioBreath.play();
+  } else {
+    sendCommand("airbag_outside_on", 0);
+    audioBreath = minim.loadFile("data/sounds/breathout/out"+(int)random(4)+".wav");
+    audioBreath.play();
+  }
 } //_CODE_:outsideBellows:931493:
 
 public void rollerPos_change(GSlider source, GEvent event) { //_CODE_:rollerPos:911197:
   println("rollerPos - GSlider >> GEvent." + event + " @ " + millis());
   sendCommand("roller_position_target", (int)map(rollerPos.getValueF(), 0., 1., 10000, 0));
+  audioRollerPos = minim.loadFile("data/sounds/rollerpos/rollerpos"+(int)random(3)+".wav");
+  audioRollerPos.play();
 } //_CODE_:rollerPos:911197:
 
 public void programRunning_clicked(GCheckbox source, GEvent event) { //_CODE_:programRunning:293782:
@@ -81,11 +105,10 @@ public void poundingSpeed_change(GSlider source, GEvent event) { //_CODE_:poundi
 
 public void feetRoller_clicked(GCheckbox source, GEvent event) { //_CODE_:feetRoller:520485:
   println("feetRoller - GCheckbox >> GEvent." + event + " @ " + millis());
-  if (feetRoller.isSelected()){
+  if (feetRoller.isSelected()) {
     sendCommand("feet_roller_on", 1);
     audioFeet.loop();
-  }
-  else {
+  } else {
     sendCommand("feet_roller_on", 0);
     audioFeet.pause();
   }
@@ -105,12 +128,11 @@ public void airpump_clicked(GCheckbox source, GEvent event) { //_CODE_:airpump:7
 public void redGreen_clicked(GCheckbox source, GEvent event) { //_CODE_:redGreen:320531:
   println("redGreen - GCheckbox >> GEvent." + event + " @ " + millis());
 
-  if (redGreen.isSelected()){
+  if (redGreen.isSelected()) {
     audioRedGreen = minim.loadFile("data/sounds/red/red"+(int)random(4)+".wav");
     audioRedGreen.play();
     sendCommand("redgreen_statuslight", 1);
-  }
-  else {
+  } else {
     sendCommand("redgreen_statuslight", 0);
     audioRedGreen = minim.loadFile("data/sounds/green/green"+(int)random(4)+".wav");
     audioRedGreen.play();
@@ -119,6 +141,8 @@ public void redGreen_clicked(GCheckbox source, GEvent event) { //_CODE_:redGreen
 
 public void chairFlat_clicked(GCheckbox source, GEvent event) { //_CODE_:chairFlat:629966:
   println("chairFlat - GCheckbox >> GEvent." + event + " @ " + millis());
+  audioChairFlat = minim.loadFile("data/sounds/chairflat/chairflat"+(int)random(3)+".wav");
+  audioChairFlat.play();
   if (chairFlat.isSelected())sendCommand("chair_position_target", 0000);
   else sendCommand("chair_position_target", 10000);
 } //_CODE_:chairFlat:629966:
@@ -129,7 +153,7 @@ public void voiceTriggerLevel_change1(GSlider source, GEvent event) { //_CODE_:v
 
 public void speech_click(GButton source, GEvent event) { //_CODE_:speech:962442:
   println("testSpeech - GButton >> GEvent." + event + " @ " + millis());
-  if(robotVoice.isSelected())  googleTTS(speechString[(int)random(speechString.length)]);
+  if (robotVoice.isSelected())  googleTTS(speechString[(int)random(speechString.length)]);
   else speak();
 } //_CODE_:speech:962442:
 
@@ -145,7 +169,7 @@ public void robotVoice_clicked(GCheckbox source, GEvent event) { //_CODE_:robotV
 
 // Create all the GUI controls. 
 // autogenerated do not edit
-public void createGUI(){
+public void createGUI() {
   G4P.messagesEnabled(false);
   G4P.setGlobalColorScheme(GCScheme.BLUE_SCHEME);
   G4P.setMouseOverEnabled(false);

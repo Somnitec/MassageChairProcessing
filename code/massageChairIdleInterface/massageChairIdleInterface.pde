@@ -43,6 +43,12 @@ AudioPlayer audioRedGreen;
 
 
 
+int minMassageCycles= 10;
+int maxMassageCycles= 20;
+
+int minChillTime = 2;//seconds
+int maxChillTime = 5;
+
 public void setup() {
 
   size(480, 320, JAVA2D);
@@ -75,128 +81,12 @@ boolean breathIn = false;
 int breathTimer = 0;
 
 public void draw() {
+
+
   background(230);
 
-  if (programRunning.isSelected()) {
-    int bpm = 12;
-    float breathInFraction = map(bpm, 5, 40, .2, .5);
-    int breathTime = 60000 / bpm;
-    if (breathIn)breathTime*=breathInFraction;
-    else breathTime*=(1-breathInFraction);
+  if (programRunning.isSelected()) runProgram();
 
-    int timeNow=millis();
-    if (timeNow-breathTimer>breathTime) {
-      breathTimer=timeNow;
-      breathIn=!breathIn;
-      if (breathIn) {
-        println("breath in");
-        airpump.setSelected(true);
-        airpump_clicked(pounding, GEvent.CLICKED);
-        outsideBellows.setSelected(true);
-        outsideBellows_clicked(outsideBellows, GEvent.CLICKED);
-      } else {
-        println("breath out");
-        airpump.setSelected(false);
-        airpump_clicked(pounding, GEvent.CLICKED);
-        outsideBellows.setSelected(false);
-        outsideBellows_clicked(outsideBellows, GEvent.CLICKED);
-      }
-    }
-
-
-    //breathing code
-    //40s until breating continues slow after talking
-
-    //normal breathing 12 to 15breaths per minute
-    //1.5-2s in
-    //1.5-2s out
-    //1-2s pauze
-
-    //5bpm is slow breathing
-    //exersize is 30-40bpm
-
-
-    if (!caseRunning) {
-      resetAll();
-      int cases = 3;
-      currentCase =  (int)random(cases);
-      println("new case = "+currentCase);
-      caseRunning=true;
-      caseStartTime = millis();
-    } else {
-      switch (currentCase) {
-      case 0://chilling
-        if (cycles<0)cycles =4;
-        cycleTime = 2000;
-        if (millis()-caseStartTime>cycleTime) {
-          //airpump.setSelected(true);
-          //airpump_clicked(pounding, GEvent.CLICKED);
-          caseStartTime+=cycleTime;
-          cycles--;
-          println(cycles%1);
-
-          //outsideBellows.setSelected(boolean(cycles%2));
-          //outsideBellows_clicked(outsideBellows, GEvent.CLICKED);
-        }
-        if (cycles<0) {
-          caseRunning=false;
-          println("that was chilling");
-          //airpump.setSelected(false);
-          //airpump_clicked(pounding, GEvent.CLICKED);
-        }
-        break;
-      case 1://massaging
-        if (cycles<0)cycles =10;
-        cycleTime = 1000;
-        if (millis()-caseStartTime>cycleTime) {
-          pounding.setSelected(boolean(int(random(2))));
-          pounding_clicked(pounding, GEvent.CLICKED);
-          kneading.setSelected(boolean(int(random(2))));
-          kneading_clicked(pounding, GEvent.CLICKED);
-
-          caseStartTime+=cycleTime;
-          cycles--;
-          //println(cycles);
-        }
-        if (cycles<0) {
-          caseRunning=false;
-          println("that was massaging");
-        }
-        break;
-      case 2://talking
-        if (!audioVoice.isPlaying()) {
-          if (cycles<1) {
-            speech_click(speech, GEvent.CLICKED);
-            cycles = 1;
-          } else {
-            caseRunning=false;
-            cycles = -1;
-            println("that was talking");
-          }
-        }
-        if (!audioVoice.isPlaying()) {
-        }
-        break;
-      }
-    }
-
-    /*
-    if ( !audioPlayer.isPlaying())  audioPlayer.loop();
-     
-     if (!pounding.isSelected()) {
-     pounding.setSelected(true);
-     pounding_clicked(pounding, GEvent.CLICKED);
-     }
-     if (!kneading.isSelected()) {
-     kneading.setSelected(true);
-     kneading_clicked(pounding, GEvent.CLICKED);
-     }
-     } else {
-     if ( audioPlayer.isPlaying() ) {
-     audioPlayer.pause();
-     }
-     */
-  }
 
   if (audioVoice.isPlaying()) {
     //background((int)map(audioVoice.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 255));
@@ -224,7 +114,9 @@ void sendScreen(String text) {//does not work
   println(input);
 }
 
-void speak(){
+void speak() {
+  audioVoice = minim.loadFile("data/sounds/chairVoice/chairvoice"+(int)random(16)+".wav");
+  audioVoice.play();
 }
 
 void googleTTS(String txt) {
@@ -276,18 +168,38 @@ void resetAll() {
 
   feetRoller.setSelected(false);
   feetRoller_clicked(feetRoller, GEvent.CLICKED);
-  airpump.setSelected(false);
-  airpump_clicked(airpump, GEvent.CLICKED);
-  shoulders.setSelected(false);
-  shoulders_clicked(shoulders, GEvent.CLICKED);
-  arms.setSelected(false);
-  arms_clicked(arms, GEvent.CLICKED);
-  legs.setSelected(false);
-  legs_clicked(legs, GEvent.CLICKED);
-  outsideBellows.setSelected(false);
-  outsideBellows_clicked(outsideBellows, GEvent.CLICKED);
-  redGreen.setSelected(false);
-  redGreen_clicked(redGreen, GEvent.CLICKED);
-  chairFlat.setSelected(false);
-  chairFlat_clicked(chairFlat, GEvent.CLICKED);
+  //airpump.setSelected(false);
+  //airpump_clicked(airpump, GEvent.CLICKED);
+  if (shoulders.isSelected()) {
+    shoulders.setSelected(false);
+    shoulders_clicked(shoulders, GEvent.CLICKED);
+  }
+  if (arms.isSelected()) {
+    arms.setSelected(false);
+    arms_clicked(arms, GEvent.CLICKED);
+  }
+  if (legs.isSelected()) {
+    legs.setSelected(false);
+    legs_clicked(legs, GEvent.CLICKED);
+  }
+  //outsideBellows.setSelected(false);
+  //outsideBellows_clicked(outsideBellows, GEvent.CLICKED);
+  if (redGreen.isSelected()) {
+    redGreen.setSelected(false);
+    redGreen_clicked(redGreen, GEvent.CLICKED);
+  }
+  if (chairFlat.isSelected()) {
+    chairFlat.setSelected(false);
+    chairFlat_clicked(chairFlat, GEvent.CLICKED);
+  }
+}
+
+void bellowSound(boolean in) {
+  if (in) {
+    audioRedGreen = minim.loadFile("data/sounds/airbagsin/airbag"+(int)random(3)+".wav");
+    audioRedGreen.play();
+  } else {
+    audioRedGreen = minim.loadFile("data/sounds/airbagsout/airbagout"+(int)random(3)+".wav");
+    audioRedGreen.play();
+  }
 }
