@@ -1,11 +1,6 @@
 //todo
-//make breathing contant (but slowing/speeding?)
-//write texts for speech
-//make massage program make some sense
-//record delicate sounds
-//edit and tweak sounds for on sound shower (left/right separate, no distortion, right volume)
-//confirm sounds not getting boring
-//better speech engine?
+//make massage choose a few random parameters and timings
+//balance audio levels between speech and massage
 
 
 import java.net.*;
@@ -43,11 +38,7 @@ AudioPlayer audioRedGreen;
 
 
 
-int minMassageCycles= 10;
-int maxMassageCycles= 20;
 
-int minChillTime = 2;//seconds
-int maxChillTime = 5;
 
 public void setup() {
 
@@ -67,18 +58,15 @@ public void setup() {
   audioKneading = minim.loadFile("data/sounds/kneading.wav");
   audioFeet = minim.loadFile("data/sounds/feetroller.wav");
 
+  audioVoice.setGain(-10);
+
+
 
   frameRate(10);
+  voiceTriggerLevel.setValue(.15);
 }
 
-boolean caseRunning = false;
-int currentCase =0;
-int caseStartTime;
-int cycles=0;
-int cycleTime;
 
-boolean breathIn = false;
-int breathTimer = 0;
 
 public void draw() {
 

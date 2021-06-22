@@ -1,3 +1,26 @@
+int minMassageCycles= 10;
+int maxMassageCycles= 20;
+
+int minChillTime = 2;//seconds
+int maxChillTime = 5;
+
+int minMassageTime = 1000;
+int  maxMassageTime = 2000;
+
+int maxMassageItems = 5;
+
+
+int massageItems = 9;
+boolean[] massageActive = new boolean[massageItems];
+boolean caseRunning = false;
+int currentCase =0;
+int caseStartTime;
+int cycles=0;
+int cycleTime;
+
+boolean breathIn = false;
+int breathTimer = 0;
+
 void runProgram() {
 
   if (shoulders.isSelected()||arms.isSelected()||legs.isSelected()||outsideBellows.isSelected()) {
@@ -74,13 +97,56 @@ void runProgram() {
       }
       break;
     case 1://massaging
-      if (cycles<0)cycles =(int)random(minMassageCycles, maxMassageCycles);
-      cycleTime = 1000;
+      if (cycles<0) {
+        cycles =(int)random(minMassageCycles, maxMassageCycles);
+        for (int i = 0; i<massageItems; i++) {
+          massageActive[i]=false;
+        }
+        int massageNo = (int)random(maxMassageItems);
+        for (int i = 0; i<massageNo; i++) {
+          massageActive[(int)random(massageItems)]=true;
+        }
+        cycleTime = (int) random(minMassageTime, maxMassageTime);
+      }
+
       if (millis()-caseStartTime>cycleTime) {
-        pounding.setSelected(boolean(int(random(2))));
-        pounding_clicked(pounding, GEvent.CLICKED);
-        kneading.setSelected(boolean(int(random(2))));
-        kneading_clicked(pounding, GEvent.CLICKED);
+        if (massageActive[0]) {
+          pounding.setSelected(boolean(int(random(2))));
+          pounding_clicked(pounding, GEvent.CLICKED);
+        }
+        if (massageActive[1]) {
+          kneading.setSelected(boolean(int(random(2))));
+          kneading_clicked(pounding, GEvent.CLICKED);
+        }
+        if (massageActive[2]) {
+          feetRoller.setSelected(boolean(int(random(2))));
+          feetRoller_clicked(feetRoller, GEvent.CLICKED);
+        }
+        if (massageActive[3]) {
+          shoulders.setSelected(boolean(int(random(2))));
+          shoulders_clicked(shoulders, GEvent.CLICKED);
+        }
+        if (massageActive[4]) {
+          arms.setSelected(boolean(int(random(2))));
+          arms_clicked(arms, GEvent.CLICKED);
+        }
+        if (massageActive[5]) {
+          legs.setSelected(boolean(int(random(2))));
+          legs_clicked(legs, GEvent.CLICKED);
+        }
+        if (massageActive[6]) {
+          redGreen.setSelected(boolean(int(random(2))));
+          redGreen_clicked(redGreen, GEvent.CLICKED);
+        }
+        if (massageActive[7]) {
+          chairFlat.setSelected(boolean(int(random(2))));
+          chairFlat_clicked(chairFlat, GEvent.CLICKED);
+        }
+        if (massageActive[8]) {
+          rollerPos.setValue(random(1.));
+          rollerPos_change(rollerPos, GEvent.CLICKED);
+        }
+ 
 
         caseStartTime+=cycleTime;
         cycles--;
