@@ -65,7 +65,7 @@ public void setup() {
   audioPounding.setGain(-10);
   audioKneading.setGain(-20);
   audioFeet.setGain(-5);
-  audioChairFlat.setGain(-20);
+  audioChairFlat.setGain(-40);
   audioBreath.setGain(-10);
 
 

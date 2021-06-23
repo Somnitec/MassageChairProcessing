@@ -80,8 +80,8 @@ void runProgram() {
     caseRunning=true;
     caseStartTime = millis();
     if(currentCase==0)currentState.setText("chilling");
-    if(currentCase==0)currentState.setText("massaging");
-    if(currentCase==0)currentState.setText("talking");
+    if(currentCase==1)currentState.setText("massaging");
+    if(currentCase==2)currentState.setText("talking");
     if (currentCase!=2) {
       rollerPos.setValue(random(1.));
       rollerPos_change(rollerPos, GEvent.CLICKED);
