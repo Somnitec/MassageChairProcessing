@@ -79,6 +79,9 @@ void runProgram() {
     println("new case = "+currentCase);
     caseRunning=true;
     caseStartTime = millis();
+    if(currentCase==0)currentState.setText("chilling");
+    if(currentCase==0)currentState.setText("massaging");
+    if(currentCase==0)currentState.setText("talking");
     if (currentCase!=2) {
       rollerPos.setValue(random(1.));
       rollerPos_change(rollerPos, GEvent.CLICKED);

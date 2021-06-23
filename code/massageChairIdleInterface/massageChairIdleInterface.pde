@@ -58,6 +58,7 @@ public void setup() {
   audioFeet = minim.loadFile("data/sounds/feetroller.wav");
   audioBreath= minim.loadFile("speech.mp3");
   audioChairFlat= minim.loadFile("speech.mp3");
+  audioRedGreen = minim.loadFile("data/sounds/red/red"+(int)random(4)+".wav");
 
   audioVoice.setGain(10);
 

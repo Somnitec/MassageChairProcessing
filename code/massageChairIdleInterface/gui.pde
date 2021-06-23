@@ -284,11 +284,20 @@ public void createGUI(){
   serialOn.setText("serialOn");
   serialOn.setOpaque(false);
   serialOn.addEventHandler(this, "serialOn_clicked");
+  serialOn.setSelected(true);
   robotVoice = new GCheckbox(this, 248, 28, 120, 20);
   robotVoice.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   robotVoice.setText("robotVoice");
   robotVoice.setOpaque(false);
   robotVoice.addEventHandler(this, "robotVoice_clicked");
+  label4 = new GLabel(this, 356, 167, 80, 20);
+  label4.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  label4.setText("currentState:");
+  label4.setOpaque(false);
+  currentState = new GLabel(this, 354, 187, 80, 20);
+  currentState.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  currentState.setText("state");
+  currentState.setOpaque(false);
 }
 
 // Variable declarations 
@@ -315,3 +324,5 @@ GButton speech;
 GLabel label3; 
 GCheckbox serialOn; 
 GCheckbox robotVoice; 
+GLabel label4; 
+GLabel currentState; 
