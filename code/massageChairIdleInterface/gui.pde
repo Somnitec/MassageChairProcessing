@@ -215,6 +215,7 @@ public void createGUI(){
   programRunning.setText("programRunning");
   programRunning.setOpaque(false);
   programRunning.addEventHandler(this, "programRunning_clicked");
+  programRunning.setSelected(true);
   kneadingSpeed = new GSlider(this, 88, 20, 100, 40, 10.0);
   kneadingSpeed.setLimits(1.0, 0.0, 1.0);
   kneadingSpeed.setNumberFormat(G4P.DECIMAL, 2);

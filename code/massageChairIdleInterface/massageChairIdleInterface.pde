@@ -69,7 +69,7 @@ public void setup() {
 
 
   frameRate(60);
-  voiceTriggerLevel.setValue(.15);
+  voiceTriggerLevel.setValue(.10);
 }
 
 

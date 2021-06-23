@@ -1,5 +1,5 @@
-int minMassageCycles= 10;
-int maxMassageCycles= 20;
+int minMassageCycles =5;
+int maxMassageCycles=10;
 
 int minChillTime = 2;//seconds
 int maxChillTime = 5;
@@ -79,8 +79,10 @@ void runProgram() {
     println("new case = "+currentCase);
     caseRunning=true;
     caseStartTime = millis();
-    rollerPos.setValue(random(1.));
-    rollerPos_change(rollerPos, GEvent.CLICKED);
+    if (currentCase!=2) {
+      rollerPos.setValue(random(1.));
+      rollerPos_change(rollerPos, GEvent.CLICKED);
+    }
   } else {
     switch (currentCase) {
     case 0://chilling
@@ -112,15 +114,15 @@ void runProgram() {
       }
 
       if (millis()-caseStartTime>cycleTime) {
-        if (massageActive[0]) {
+        if (massageActive[0]||massageActive[2]||massageActive[4]||massageActive[6]) {
           pounding.setSelected(boolean(int(random(2))));
           pounding_clicked(pounding, GEvent.CLICKED);
         }
-        if (massageActive[1]) {
+        if (massageActive[1]||massageActive[3]) {
           kneading.setSelected(boolean(int(random(2))));
           kneading_clicked(pounding, GEvent.CLICKED);
         }
-        if (massageActive[2]) {
+        if (massageActive[2]||massageActive[5]) {
           feetRoller.setSelected(boolean(int(random(2))));
           feetRoller_clicked(feetRoller, GEvent.CLICKED);
         }
@@ -170,6 +172,7 @@ void runProgram() {
           pounding_clicked(pounding, GEvent.CLICKED);
           kneading.setSelected(true);
           kneading_clicked(pounding, GEvent.CLICKED);
+          delay(1000);
           speech_click(speech, GEvent.CLICKED);
           cycles = 1;
         } else {
