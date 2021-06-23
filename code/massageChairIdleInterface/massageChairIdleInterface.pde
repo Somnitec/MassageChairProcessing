@@ -110,6 +110,7 @@ void sendScreen(String text) {//does not work
 }
 
 void speak() {
+  audioVoice.close();
   audioVoice = minim.loadFile("data/sounds/chairVoice/chairvoice"+(int)random(16)+".wav");
   audioVoice.play();
 }
@@ -143,6 +144,7 @@ void googleTTS(String txt) {
   catch (MalformedURLException e) {
     e.printStackTrace();
   }
+  audioVoice.close();
   audioVoice = minim.loadFile("speech.mp3", 2048);
 
   audioVoice.play();

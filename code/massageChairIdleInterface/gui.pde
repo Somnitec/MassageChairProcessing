@@ -73,10 +73,12 @@ public void outsideBellows_clicked(GCheckbox source, GEvent event) { //_CODE_:ou
   println("outsideBellows - GCheckbox >> GEvent." + event + " @ " + millis());
   if (outsideBellows.isSelected()) {
     sendCommand("airbag_outside_on", 1);
+    audioBreath.close();
     audioBreath = minim.loadFile("data/sounds/breathin/in"+(int)random(4)+".wav");
     audioBreath.play();
   } else {
     sendCommand("airbag_outside_on", 0);
+    audioBreath.close();
     audioBreath = minim.loadFile("data/sounds/breathout/out"+(int)random(4)+".wav");
     audioBreath.play();
   }
@@ -129,11 +131,13 @@ public void redGreen_clicked(GCheckbox source, GEvent event) { //_CODE_:redGreen
   println("redGreen - GCheckbox >> GEvent." + event + " @ " + millis());
 
   if (redGreen.isSelected()) {
+    audioRedGreen.close();
     audioRedGreen = minim.loadFile("data/sounds/red/red"+(int)random(4)+".wav");
     audioRedGreen.play();
     sendCommand("redgreen_statuslight", 1);
   } else {
     sendCommand("redgreen_statuslight", 0);
+    audioRedGreen.close();
     audioRedGreen = minim.loadFile("data/sounds/green/green"+(int)random(4)+".wav");
     audioRedGreen.play();
   }
@@ -141,6 +145,7 @@ public void redGreen_clicked(GCheckbox source, GEvent event) { //_CODE_:redGreen
 
 public void chairFlat_clicked(GCheckbox source, GEvent event) { //_CODE_:chairFlat:629966:
   println("chairFlat - GCheckbox >> GEvent." + event + " @ " + millis());
+  audioChairFlat.close();
   audioChairFlat = minim.loadFile("data/sounds/chairflat/chairflat"+(int)random(3)+".wav");
   audioChairFlat.play();
   if (chairFlat.isSelected())sendCommand("chair_position_target", 0000);
@@ -279,7 +284,6 @@ public void createGUI(){
   serialOn.setText("serialOn");
   serialOn.setOpaque(false);
   serialOn.addEventHandler(this, "serialOn_clicked");
-  serialOn.setSelected(true);
   robotVoice = new GCheckbox(this, 248, 28, 120, 20);
   robotVoice.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
   robotVoice.setText("robotVoice");
