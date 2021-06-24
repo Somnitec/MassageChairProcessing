@@ -65,7 +65,7 @@ public void setup() {
   audioPounding.setGain(-10);
   audioKneading.setGain(-20);
   audioFeet.setGain(-5);
-  audioChairFlat.setGain(-40);
+  audioChairFlat.setGain(-80);
   audioBreath.setGain(-10);
 
 
@@ -79,9 +79,9 @@ public void draw() {
 
 
   background(230);
-
+if(hour()>11&&hour()<19){
   if (programRunning.isSelected()) runProgram();
-
+}
 
   if (audioVoice.isPlaying()) {
     //background((int)map(audioVoice.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 255));
