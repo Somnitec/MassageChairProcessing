@@ -93,6 +93,7 @@ public void rollerPos_change(GSlider source, GEvent event) { //_CODE_:rollerPos:
 
 public void programRunning_clicked(GCheckbox source, GEvent event) { //_CODE_:programRunning:293782:
   println("programRunning - GCheckbox >> GEvent." + event + " @ " + millis());
+  if(!programRunning.isSelected())resetAll();
 } //_CODE_:programRunning:293782:
 
 public void kneadingSpeed_change(GSlider source, GEvent event) { //_CODE_:kneadingSpeed:626460:

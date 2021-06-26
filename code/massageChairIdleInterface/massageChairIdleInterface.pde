@@ -74,14 +74,18 @@ public void setup() {
 }
 
 
-
+boolean timeOut = false;
 public void draw() {
 
 
   background(230);
-if(hour()>11&&hour()<19){
-  if (programRunning.isSelected()) runProgram();
-}
+  if (hour()>11&&hour()<19) {
+    timeOut=false;
+    if (programRunning.isSelected()) runProgram();
+  } else {
+    if (timeOut==false)  resetAll();
+    timeOut=true;
+  }
 
   if (audioVoice.isPlaying()) {
     //background((int)map(audioVoice.left.level(), 0, voiceTriggerLevel.getValueF(), 0, 255));
